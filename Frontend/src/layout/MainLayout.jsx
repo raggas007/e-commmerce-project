@@ -14,7 +14,7 @@ const MainLayout = () => {
       }}
     >
       <Header />
-      <Stack sx={{ padding: "2rem" }}>
+      <Stack sx={{ padding: "10rem" }}>
         <Outlet />
       </Stack>
 

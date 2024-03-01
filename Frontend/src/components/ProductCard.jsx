@@ -15,7 +15,7 @@ const ProductCard = (props) => {
     <Box>
       <Card
         sx={{
-          maxWidth: 350,
+          maxWidth: "350px",
           boxShadow:
             "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
         }}
@@ -28,7 +28,7 @@ const ProductCard = (props) => {
           alt={props.name}
           style={{
             width: " 320px",
-            height: "200px",
+            height: "210px",
             marginTop: "1rem",
             cursor: "pointer",
           }}

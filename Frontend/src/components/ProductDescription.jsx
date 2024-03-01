@@ -12,22 +12,49 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DeleteProductDialog from "./DeleteProductDialog";
+import { useMutation } from "react-query";
+import $axios from "../lib/axios.instance";
 
 const ProductDescription = (props) => {
   const userRole = localStorage.getItem("userRole");
   const navigate = useNavigate();
 
+  const params = useParams();
+
   const [count, setCount] = useState(1);
 
+  //increase order
   const increaseCount = () => {
-   
+    if (count === props.quantity) {
+      return;
+    }
     setCount(count + 1);
   };
+
+  //decrease order
   const decreaseCount = () => {
+    if (count === 1) {
+      return;
+    }
     setCount(count - 1);
   };
+  const { isLoading, mutate } = useMutation({
+    mutationKey: ["add-to-cart"],
+    mutationFn: async () => {
+      return await $axios.post("/cart/item/add", {
+        productId: params?.id,
+        orderedQuantity: count,
+      });
+    },
+    onSuccess: (response) => {
+      navigate("/cart");
+    },
+    onError: (error) => {
+      console.log(error?.response?.data?.message);
+    },
+  });
   return (
     <Box>
       <Grid container direction="column" spacing={1} sx={{ width: "100%" }}>
@@ -72,16 +99,25 @@ const ProductDescription = (props) => {
         {userRole === "buyer" && (
           <>
             <Stack direction="row" alignItems="center" spacing={1}>
-              <IconButton onClick={decreaseCount}>
+              <IconButton onClick={decreaseCount} disabled={count === 1}>
                 <RemoveIcon />
               </IconButton>
               <Typography>{count}</Typography>
-              <IconButton onClick={increaseCount}>
+              <IconButton
+                onClick={increaseCount}
+                disabled={count === props.quantity}
+              >
                 <AddIcon />
               </IconButton>
             </Stack>
             <Grid>
-              <Button variant="contained" color="success">
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => {
+                  mutate();
+                }}
+              >
                 ADd to cart
               </Button>
             </Grid>

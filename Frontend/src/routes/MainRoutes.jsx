@@ -7,6 +7,7 @@ import ProductList from "../pages/ProductList";
 import AddProduct from "../pages/AddProduct";
 import ProductsDetail from "../pages/ProductDetail";
 import EditProduct from "../pages/EditProduct";
+import Cart from "../pages/Cart";
 
 const MainRoutes = [
   {
@@ -40,6 +41,10 @@ const MainRoutes = [
       {
         path: "product/edit/:id",
         element: <EditProduct />,
+      },
+      {
+        path: "cart",
+        element: <Cart />,
       },
     ],
   },

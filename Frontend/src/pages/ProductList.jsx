@@ -10,7 +10,7 @@ const ProductList = () => {
     <Box
       sx={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         gap: "1rem",
         flexWrap: "wrap",
         marginLeft: "1rem",

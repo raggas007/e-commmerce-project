@@ -48,10 +48,10 @@ const AddProduct = () => {
           name: "",
           brand: "",
           price: "",
-          quantity: "",
+          quantity: 1,
           description: "",
           category: "",
-          freeShipping: "",
+          freeShipping: false,
           image: null,
         }}
         validationSchema={Yup.object({

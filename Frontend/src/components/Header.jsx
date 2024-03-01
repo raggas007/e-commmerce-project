@@ -16,27 +16,25 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import LogoutConfirmationDialog from "./LogoutConfirmationDialog";
 import CustomAvatar from "./CustomAvatar";
+import ShoppingCartTwoToneIcon from "@mui/icons-material/ShoppingCartTwoTone";
+import { Badge } from "@mui/material";
+
 const drawerWidth = 240;
 const navItems = [
   {
     id: 1,
     name: "Home",
-    path: "home",
+    path: "/home",
   },
   {
     id: 2,
     name: "Product",
-    path: "product",
+    path: "/product",
   },
   {
     id: 3,
-    name: "Contact",
-    path: "contact",
-  },
-  {
-    id: 4,
     name: "About",
-    path: "about",
+    path: "/about",
   },
 ];
 
@@ -52,7 +50,7 @@ const Header = (props) => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "left" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        NEPAL MART
+        NEPAL MART 🛒
       </Typography>
       <Divider />
       <List>
@@ -98,7 +96,7 @@ const Header = (props) => {
               display: { xs: "none", sm: "block" },
             }}
           >
-            NEPAL MART
+            NEPAL MART 🛒
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
@@ -113,6 +111,18 @@ const Header = (props) => {
               </Button>
             ))}
           </Box>
+          <IconButton
+            sx={{
+              color: "white",
+            }}
+            onClick={() => {
+              navigate("/cart");
+            }}
+          >
+            <Badge badgeContent={4} color="primary">
+              <ShoppingCartTwoToneIcon color="white" />
+            </Badge>
+          </IconButton>
           <CustomAvatar />
           <LogoutConfirmationDialog />
         </Toolbar>
