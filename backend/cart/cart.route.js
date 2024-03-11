@@ -113,6 +113,6 @@ router.get("/cart/item/list", isBuyer, async (req, res) => {
     },
   ]);
 
-  return res.status(200).send({ message: "success", cart: cartItemList });
+  return res.status(200).send({ message: "success", cartItems: cartItemList });
 });
 export default router;

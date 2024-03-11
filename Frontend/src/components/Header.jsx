@@ -43,6 +43,8 @@ const Header = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const userRole = localStorage.getItem("userRole");
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -111,18 +113,20 @@ const Header = (props) => {
               </Button>
             ))}
           </Box>
-          <IconButton
-            sx={{
-              color: "white",
-            }}
-            onClick={() => {
-              navigate("/cart");
-            }}
-          >
-            <Badge badgeContent={4} color="primary">
-              <ShoppingCartTwoToneIcon color="white" />
-            </Badge>
-          </IconButton>
+          {userRole === "buyer" && (
+            <IconButton
+              sx={{
+                color: "white",
+              }}
+              onClick={() => {
+                navigate("/cart");
+              }}
+            >
+              <Badge badgeContent={4} color="primary">
+                <ShoppingCartTwoToneIcon color="white" />
+              </Badge>
+            </IconButton>
+          )}
           <CustomAvatar />
           <LogoutConfirmationDialog />
         </Toolbar>

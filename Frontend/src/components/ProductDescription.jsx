@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteProductDialog from "./DeleteProductDialog";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import $axios from "../lib/axios.instance";
 
 const ProductDescription = (props) => {
@@ -23,6 +23,7 @@ const ProductDescription = (props) => {
 
   const params = useParams();
 
+  const queryClient = useQueryClient();
   const [count, setCount] = useState(1);
 
   //increase order
@@ -49,7 +50,7 @@ const ProductDescription = (props) => {
       });
     },
     onSuccess: (response) => {
-      navigate("/cart");
+     console.log(response?.data) // queryClient.invalidateQueries("get-cart-item-count");
     },
     onError: (error) => {
       console.log(error?.response?.data?.message);
