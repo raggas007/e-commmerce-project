@@ -14,7 +14,7 @@ const Footer = () => {
         alignItems: "center",
       }}
     >
-      <Typography variant="h4">copyright @ NEPAL MART 2024</Typography>
+      <Typography variant="h4">copyright @ PARAJULI MART Est.1999</Typography>
     </Box>
   );
 };

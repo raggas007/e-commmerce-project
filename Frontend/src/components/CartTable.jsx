@@ -6,7 +6,15 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Box, Chip, IconButton, LinearProgress, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  IconButton,
+  LinearProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -17,21 +25,53 @@ import { fallbackImage } from "../constant/general.constant";
 const CartTable = ({ cartItems }) => {
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate } = useMutation({
-    mutationKey: ["remove-cart-item"],
-    mutationFn: async (productId) => {
-      return await $axios.delete(`/cart/item/remove/${productId}`);
-    },
-    onSuccess: (res) => {
-      queryClient.invalidateQueries("get-cart-items");
-    },
-    onError: (error) => {
-      console.log(error?.response?.data?.message);
-    },
-  });
+  const { isLoading: deleteCartItemLoading, mutate: deleteCartItemMutate } =
+    useMutation({
+      mutationKey: ["remove-cart-item"],
+      mutationFn: async (productId) => {
+        return await $axios.delete(`/cart/item/remove/${productId}`);
+      },
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("get-cart-items");
+        queryClient.invalidateQueries("get-cart-item-count");
+      },
+      onError: (error) => {
+        console.log(error?.response?.data?.message);
+      },
+    });
+
+  const { isLoading: flushCartItemLoading, mutate: flushCartItemMutate } =
+    useMutation({
+      mutationKey: ["flush-cart"],
+      mutationFn: async () => {
+        return await $axios.delete("/cart/flush");
+      },
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("get-cart-items");
+        queryClient.invalidateQueries("get-cart-item-count");
+      },
+      onError: (error) => {
+        console.log("error");
+      },
+    });
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {isLoading && <LinearProgress color="secondary" />}
+    <Stack sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          color="error"
+          sx={{ width: "140px" }}
+          onClick={() => {
+            flushCartItemMutate();
+          }}
+        >
+          <Typography>Clear Cart</Typography>
+        </Button>
+      </Box>
+
+      {(deleteCartItemLoading || flushCartItemLoading) && (
+        <LinearProgress color="secondary" />
+      )}
       <TableContainer
         component={Paper}
         sx={{
@@ -135,7 +175,7 @@ const CartTable = ({ cartItems }) => {
                   <TableCell align="center">
                     <IconButton
                       onClick={() => {
-                        mutate(item?.productId);
+                        deleteCartItemMutate(item?.productId);
                       }}
                     >
                       <ClearIcon color="error" sx={{ cursor: "pointer" }} />
@@ -147,7 +187,7 @@ const CartTable = ({ cartItems }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Box>
+    </Stack>
   );
 };
 

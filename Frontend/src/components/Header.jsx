@@ -17,7 +17,9 @@ import { useNavigate } from "react-router-dom";
 import LogoutConfirmationDialog from "./LogoutConfirmationDialog";
 import CustomAvatar from "./CustomAvatar";
 import ShoppingCartTwoToneIcon from "@mui/icons-material/ShoppingCartTwoTone";
-import { Badge } from "@mui/material";
+import { Badge, CircularProgress } from "@mui/material";
+import { useQuery } from "react-query";
+import $axios from "../lib/axios.instance";
 
 const drawerWidth = 240;
 const navItems = [
@@ -49,10 +51,21 @@ const Header = (props) => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  //get cart item count
+  const { isError, error, data } = useQuery({
+    queryKey: ["get-cart-item-count"],
+    queryFn: async () => {
+      return await $axios.get("/cart/item/count");
+    },
+    enabled: userRole === "buyer",
+  });
+
+  const itemCount = data?.data?.itemCount;
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "left" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        NEPAL MART 🛒
+        PARAJULI MART 🛒
       </Typography>
       <Divider />
       <List>
@@ -98,7 +111,7 @@ const Header = (props) => {
               display: { xs: "none", sm: "block" },
             }}
           >
-            NEPAL MART 🛒
+            PARAJULI MART 🛒
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
@@ -122,7 +135,7 @@ const Header = (props) => {
                 navigate("/cart");
               }}
             >
-              <Badge badgeContent={4} color="primary">
+              <Badge badgeContent={itemCount} color="primary">
                 <ShoppingCartTwoToneIcon color="white" />
               </Badge>
             </IconButton>

@@ -6,3 +6,6 @@ export let addCartItemValidationSchema = Yup.object({
     .required("order quantity is required.")
     .min(1, "minimum order quantity should be at least 1"),
 });
+export let updateQuantityValidationSchema = Yup.object({
+  action: Yup.string().required().oneOf(["inc", "dec"]),
+});

@@ -14,8 +14,9 @@ const Cart = () => {
       return await $axios.get("/cart/item/list");
     },
   });
-  console.log(data);
+
   const cartItems = data?.data?.cartItems;
+  const orderSummary = data?.data?.orderSummary;
 
   if (isLoading) {
     return <Loader />;
@@ -26,7 +27,7 @@ const Cart = () => {
   return (
     <Box sx={{ display: "flex", gap: "4rem" }}>
       <CartTable cartItems={cartItems} />
-      <OrderSummary />
+      <OrderSummary orderSummary={orderSummary} />
     </Box>
   );
 };

@@ -10,6 +10,7 @@ import { validateReqBody } from "../middleware/validation.middleware.js";
 import mongoose from "mongoose";
 import { checkMongoIdValidity } from "../middleware/mongo.id.validity.middleware.js";
 import { paginationProductSchema } from "../utils/pagination.validation.js";
+import Cart from "../cart/cart.model.js";
 
 const router = express.Router();
 
@@ -79,6 +80,10 @@ router.delete(
     // delete product\
 
     await Product.deleteOne({ _id: productId });
+
+    //delete cart
+
+    await Cart.deleteMany({ productId });
     // send response
     return res
       .status(200)
