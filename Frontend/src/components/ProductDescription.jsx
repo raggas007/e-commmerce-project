@@ -50,7 +50,7 @@ const ProductDescription = (props) => {
       });
     },
     onSuccess: (response) => {
-     console.log(response?.data) // queryClient.invalidateQueries("get-cart-item-count");
+      queryClient.invalidateQueries("get-cart-item-count");
     },
     onError: (error) => {
       console.log(error?.response?.data?.message);

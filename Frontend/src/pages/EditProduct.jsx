@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { productCategories } from "../constant/general.constant";
 import * as Yup from "yup";
 import {
@@ -11,6 +11,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,8 +19,13 @@ import { useMutation, useQuery } from "react-query";
 import $axios from "../lib/axios.instance";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
+import axios from "axios";
 
 const EditProduct = () => {
+  const [productImage, setProductImage] = useState(null);
+  const [localUrl, setLocalUrl] = useState(null);
+  const [imageLoading, setImageLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const params = useParams();
@@ -49,7 +55,7 @@ const EditProduct = () => {
     },
   });
 
-  if (isLoading || editProductLoading) {
+  if (isLoading || editProductLoading || imageLoading) {
     return <Loader />;
   }
 
@@ -98,7 +104,30 @@ const EditProduct = () => {
           freeShipping: Yup.boolean().default(false),
           image: Yup.string().nullable().trim(),
         })}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
+          let imageUrl;
+
+          if (productImage) {
+            const cloudName = "dfxjppxps";
+
+            const data = new FormData();
+
+            data.append("file", productImage);
+            data.append("upload_preset", "Parajuli_shopping123");
+            data.append("cloud_name", cloudName);
+            try {
+              setImageLoading(true);
+              const response = await axios.put(
+                `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+                data
+              );
+              setImageLoading(false);
+              imageUrl = response?.data?.secure_url;
+            } catch (error) {
+              console.log("image upload error");
+            }
+          }
+          values.image = imageUrl;
           mutate(values);
         }}
       >
@@ -116,6 +145,23 @@ const EditProduct = () => {
             }}
           >
             <Typography variant="h5">Edit Product</Typography>
+            {productDetails?.image && (
+              <Stack sx={{ height: "250px" }}>
+                <img
+                  src={localUrl || productDetails?.image}
+                  alt={productDetails?.name}
+                  style={{ height: "100%" }}
+                />
+              </Stack>
+            )}
+            <input
+              type="file"
+              onChange={(event) => {
+                const file = event?.target?.files[0];
+                setProductImage(file);
+                setLocalUrl(URL.createObjectURL(file));
+              }}
+            />
             <FormControl>
               <TextField label="Name" {...getFieldProps("name")} />
               {touched.name && errors.name ? (

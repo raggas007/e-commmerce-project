@@ -36,7 +36,7 @@ const SellerProductList = () => {
       <Box
         sx={{
           display: "flex",
-          gap: "4rem",
+          gap: "2rem",
           flexWrap: "wrap",
           marginTop: "2rem",
         }}

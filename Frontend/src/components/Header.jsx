@@ -65,7 +65,7 @@ const Header = (props) => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "left" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        PARAJULI MART 🛒
+        PARAJULI SHOPPING 🛒
       </Typography>
       <Divider />
       <List>
@@ -111,7 +111,7 @@ const Header = (props) => {
               display: { xs: "none", sm: "block" },
             }}
           >
-            PARAJULI MART 🛒
+            PARAJULI SHOPPING 🛒
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (

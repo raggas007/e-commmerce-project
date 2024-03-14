@@ -8,11 +8,12 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { productCategories } from "../constant/general.constant";
 import { useMutation } from "react-query";
@@ -20,8 +21,13 @@ import $axios from "../lib/axios.instance";
 import { addProduct } from "../lib/apis";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import axios from "axios";
 
 const AddProduct = () => {
+  const [productImage, setProductImage] = useState(null);
+  const [localUrl, setLocalUrl] = useState(null);
+  const [imageLoading, setImageLoading] = useState(false);
+
   const navigate = useNavigate();
   const { isLoading, mutate } = useMutation({
     mutationKey: ["add-product"],
@@ -37,12 +43,11 @@ const AddProduct = () => {
   return (
     <Box
       sx={{
-        minHeight: "120vh",
-        width: "100vw",
-        background: "gray",
+        minHeight: "100vh",
+        width: "100%",
       }}
     >
-      {isLoading && <Loader />}
+      {(isLoading || imageLoading) && <Loader />}
       <Formik
         initialValues={{
           name: "",
@@ -85,19 +90,41 @@ const AddProduct = () => {
           freeShipping: Yup.boolean().default(false),
           image: Yup.string().nullable().trim(),
         })}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
+          let imageUrl;
+          if (productImage) {
+            const cloudName = "dfxjppxps";
+            const data = new FormData();
+            data.append("file", productImage);
+            data.append("upload_preset", "Parajuli_shopping123");
+            data.append("cloud_name", cloudName);
+
+            try {
+              setImageLoading(true);
+              const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+                data
+              );
+              setImageLoading(false);
+              imageUrl = response?.data?.secure_url;
+            } catch (error) {
+              setImageLoading(false);
+              console.log("image upload error");
+            }
+          }
+          values.image = imageUrl;
           mutate(values);
         }}
       >
         {({ handleSubmit, touched, errors, getFieldProps }) => (
           <form
             style={{
-              minHeight: "100vh",
+              minHeight: "700px",
               width: "300px",
               margin: "-4rem",
               display: "flex",
               flexDirection: "column",
-              backgroundColor: "pink",
+              backgroundColor: "purple",
               padding: "1.5rem",
               gap: "0.4rem",
               marginLeft: "38rem",
@@ -107,9 +134,33 @@ const AddProduct = () => {
             }}
             onSubmit={handleSubmit}
           >
-            <Typography variant="h5" color="yellow">
+            <Typography
+              variant="h5"
+              color="white"
+              sx={{ marginBottom: "2rem" }}
+            >
               Add Product
             </Typography>
+            {productImage && (
+              <Stack sx={{ height: "200px" }}>
+                <img
+                  src={localUrl}
+                  style={{
+                    height: "100%",
+                  }}
+                />
+              </Stack>
+            )}
+            <FormControl>
+              <input
+                type="file"
+                onChange={(event) => {
+                  const file = event?.target?.files[0];
+                  setProductImage(file);
+                  setLocalUrl(URL.createObjectURL(file));
+                }}
+              />
+            </FormControl>
             <FormControl sx={{ marginTop: "1rem" }}>
               <TextField
                 sx={{ bgcolor: "white" }}
@@ -160,7 +211,7 @@ const AddProduct = () => {
                 <FormHelperText error>{errors.quantity}</FormHelperText>
               ) : null}
             </FormControl>
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{ bgcolor: "white" }}>
               <InputLabel required>Category</InputLabel>
               <Select label="Category" {...getFieldProps("category")}>
                 {productCategories.map((item, index) => (
@@ -181,10 +232,13 @@ const AddProduct = () => {
                 alignItems: "center",
               }}
             >
-              <Typography>Free Shipping</Typography>
+              <Typography variant="subtitle1" color="white">
+                Free Shipping
+              </Typography>
               <Checkbox
                 label="Free Shipping"
                 {...getFieldProps("freeShipping")}
+                sx={{ color: "white" }}
               />
             </FormControl>
             <FormControl>

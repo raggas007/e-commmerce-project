@@ -15,7 +15,7 @@ const ProductCard = (props) => {
     <Box>
       <Card
         sx={{
-          maxWidth: "350px",
+          maxWidth: "300px",
           boxShadow:
             "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
         }}
@@ -54,8 +54,7 @@ const ProductCard = (props) => {
         <CardActions>
           <Button
             variant="contained"
-            sx={{ width: "100%" }}
-            color="success"
+            sx={{ width: "100%", background: "purple" }}
             onClick={() => {
               navigate(`/product/details/${props._id}`);
             }}

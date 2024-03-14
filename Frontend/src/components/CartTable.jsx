@@ -54,6 +54,22 @@ const CartTable = ({ cartItems }) => {
         console.log("error");
       },
     });
+
+  const { isLoading: updateCartItemLoading, mutate: updateCartQuantityMutate } =
+    useMutation({
+      mutationKey: ["update-cart-item-quantity"],
+      mutationFn: async ({ productId, action }) => {
+        return await $axios.put(`/cart/update/quantity/${productId}`, {
+          action: action,
+        });
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries("get-cart-items");
+      },
+      onError: (error) => {
+        console.log("error");
+      },
+    });
   return (
     <Stack sx={{ display: "flex", flexDirection: "column" }}>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -69,9 +85,9 @@ const CartTable = ({ cartItems }) => {
         </Button>
       </Box>
 
-      {(deleteCartItemLoading || flushCartItemLoading) && (
-        <LinearProgress color="secondary" />
-      )}
+      {(deleteCartItemLoading ||
+        flushCartItemLoading ||
+        updateCartItemLoading) && <LinearProgress color="secondary" />}
       <TableContainer
         component={Paper}
         sx={{
@@ -155,11 +171,21 @@ const CartTable = ({ cartItems }) => {
                         gap: "0.1rem",
                       }}
                     >
-                      <IconButton>
+                      <IconButton
+                        disabled={updateCartItemLoading}
+                        onClick={() => {
+                          updateCartQuantityMutate(item?.productId, "dec");
+                        }}
+                      >
                         <RemoveIcon />
                       </IconButton>
                       <Typography>{item?.orderedQuantity}</Typography>
-                      <IconButton>
+                      <IconButton
+                        disabled={updateCartItemLoading}
+                        onClick={() => {
+                          updateCartQuantityMutate(item?.productId, "inc");
+                        }}
+                      >
                         <AddIcon />
                       </IconButton>
                     </Stack>
