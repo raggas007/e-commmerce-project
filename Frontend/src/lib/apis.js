@@ -9,7 +9,7 @@ export const getProductDetails = async (id) => {
 };
 
 export const getSellerProduct = async () => {
-  return await $axios.post("/product/list/seller", { page: 1, limit: 10 });
+  return await $axios.post("/product/list/seller", { page: 1, limit: 8 });
 };
 
 export const deleteProduct = async (productId) => {
