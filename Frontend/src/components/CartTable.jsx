@@ -60,7 +60,7 @@ const CartTable = ({ cartItems }) => {
       mutationKey: ["update-cart-item-quantity"],
       mutationFn: async ({ productId, action }) => {
         return await $axios.put(`/cart/update/quantity/${productId}`, {
-          action: action,
+          action,
         });
       },
       onSuccess: () => {
@@ -174,7 +174,10 @@ const CartTable = ({ cartItems }) => {
                       <IconButton
                         disabled={updateCartItemLoading}
                         onClick={() => {
-                          updateCartQuantityMutate(item?.productId, "dec");
+                          updateCartQuantityMutate({
+                            productId: item?.productId,
+                            action: "dec",
+                          });
                         }}
                       >
                         <RemoveIcon />
@@ -183,7 +186,10 @@ const CartTable = ({ cartItems }) => {
                       <IconButton
                         disabled={updateCartItemLoading}
                         onClick={() => {
-                          updateCartQuantityMutate(item?.productId, "inc");
+                          updateCartQuantityMutate({
+                            productId: item?.productId,
+                            action: "inc",
+                          });
                         }}
                       >
                         <AddIcon />

@@ -10,6 +10,8 @@ import {
 } from "../utils/password.function.js";
 import { validateReqBody } from "../middleware/validation.middleware.js";
 import jwt from "jsonwebtoken";
+import { isUser } from "../middleware/authentication.middleware.js";
+import { checkMongoIdValidity } from "../middleware/mongo.id.validity.middleware.js";
 
 const router = express.Router();
 

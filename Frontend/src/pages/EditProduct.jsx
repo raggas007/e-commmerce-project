@@ -108,12 +108,13 @@ const EditProduct = () => {
           let imageUrl;
 
           if (productImage) {
-            const cloudName = "dfxjppxps";
+            const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+            const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
             const data = new FormData();
 
             data.append("file", productImage);
-            data.append("upload_preset", "Parajuli_shopping123");
+            data.append("upload_preset", uploadPreset);
             data.append("cloud_name", cloudName);
             try {
               setImageLoading(true);
