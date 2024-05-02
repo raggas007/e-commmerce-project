@@ -47,6 +47,7 @@ const productSchema = new mongoose.Schema(
         "liquor",
         "glasses",
         "accessory",
+        "toy",
       ],
     },
     freeShipping: {

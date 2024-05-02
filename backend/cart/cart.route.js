@@ -141,6 +141,7 @@ router.get("/cart/item/list", isBuyer, async (req, res) => {
         value: grandTotal.toFixed(2),
       },
     ],
+    grandTotal,
   });
 });
 

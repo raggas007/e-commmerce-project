@@ -1,8 +1,9 @@
 import React from "react";
 import ProductCard from "../components/ProductCard";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import BuyerProductList from "./BuyerProductList";
 import SellerProductList from "./SellerProductList";
+import SearchBar from "../components/SearchBar";
 
 const ProductList = () => {
   const userRole = localStorage.getItem("userRole");
@@ -17,6 +18,7 @@ const ProductList = () => {
         marginTop: "3rem",
       }}
     >
+      
       {userRole === "buyer" ? <BuyerProductList /> : <SellerProductList />}
     </Box>
   );

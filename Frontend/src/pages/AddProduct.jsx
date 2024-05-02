@@ -120,24 +120,20 @@ const AddProduct = () => {
         {({ handleSubmit, touched, errors, getFieldProps }) => (
           <form
             style={{
-              minHeight: "700px",
-              width: "300px",
-              margin: "-4rem",
               display: "flex",
               flexDirection: "column",
-              backgroundColor: "purple",
+              gap: "2rem",
               padding: "1.5rem",
-              gap: "0.4rem",
-              marginLeft: "38rem",
-              marginTop: "3rem",
+              marginLeft: "30rem",
+              width: "450px",
               boxShadow:
-                "0 20px 40px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.05)",
+                "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px",
             }}
             onSubmit={handleSubmit}
           >
             <Typography
               variant="h5"
-              color="white"
+              color="Black"
               sx={{ marginBottom: "2rem" }}
             >
               Add Product
@@ -233,13 +229,13 @@ const AddProduct = () => {
                 alignItems: "center",
               }}
             >
-              <Typography variant="subtitle1" color="white">
+              <Typography variant="subtitle1" color="Black">
                 Free Shipping
               </Typography>
               <Checkbox
                 label="Free Shipping"
                 {...getFieldProps("freeShipping")}
-                sx={{ color: "white" }}
+                sx={{ color: "Black" }}
               />
             </FormControl>
             <FormControl>

@@ -17,6 +17,14 @@ const Cart = () => {
 
   const cartItems = data?.data?.cartItems;
   const orderSummary = data?.data?.orderSummary;
+  const grandTotal = data?.data?.grandTotal;
+
+  const productDataForOrdering = cartItems?.map((item) => {
+    return {
+      productId: item?.productId,
+      orderedQuantity: item?.orderedQuantity,
+    };
+  });
 
   if (isLoading) {
     return <Loader />;
@@ -27,7 +35,11 @@ const Cart = () => {
   return (
     <Box sx={{ display: "flex", gap: "4rem" }}>
       <CartTable cartItems={cartItems} />
-      <OrderSummary orderSummary={orderSummary} />
+      <OrderSummary
+        orderSummary={orderSummary}
+        grandTotal={grandTotal}
+        productDataForOrdering={productDataForOrdering}
+      />
     </Box>
   );
 };

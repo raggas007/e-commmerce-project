@@ -17,9 +17,10 @@ import { useNavigate } from "react-router-dom";
 import LogoutConfirmationDialog from "./LogoutConfirmationDialog";
 import CustomAvatar from "./CustomAvatar";
 import ShoppingCartTwoToneIcon from "@mui/icons-material/ShoppingCartTwoTone";
-import { Badge, CircularProgress } from "@mui/material";
+import { Badge, CircularProgress, Stack } from "@mui/material";
 import { useQuery } from "react-query";
 import $axios from "../lib/axios.instance";
+import SearchBar from "./SearchBar";
 
 const drawerWidth = 240;
 const navItems = [
@@ -65,7 +66,7 @@ const Header = (props) => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "left" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        PARAJULI SHOPPING 🛒
+        PARAJULI SHOPPING
       </Typography>
       <Divider />
       <List>
@@ -102,6 +103,7 @@ const Header = (props) => {
           >
             <MenuIcon />
           </IconButton>
+
           <Typography
             variant="h6"
             component="div"
@@ -111,8 +113,18 @@ const Header = (props) => {
               display: { xs: "none", sm: "block" },
             }}
           >
-            PARAJULI SHOPPING 🛒
+            {"PARAJULI SHOPPING"}
+            <img
+              src="/image/shopping-cart.png"
+              alt=""
+              style={{
+                width: "30px",
+                height: "30px",
+                background: "purple",
+              }}
+            />
           </Typography>
+
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
               <Button

@@ -16,9 +16,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import DeleteProductDialog from "./DeleteProductDialog";
 import { useMutation, useQueryClient } from "react-query";
 import $axios from "../lib/axios.instance";
+import { useDispatch } from "react-redux";
+import {
+  openErrorSnackbar,
+  openSuccessSnackbar,
+} from "../stores/slices/snackbarSlices";
 
 const ProductDescription = (props) => {
   const userRole = localStorage.getItem("userRole");
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const params = useParams();
@@ -51,9 +58,10 @@ const ProductDescription = (props) => {
     },
     onSuccess: (response) => {
       queryClient.invalidateQueries("get-cart-item-count");
+      dispatch(openSuccessSnackbar(response?.data?.message));
     },
     onError: (error) => {
-      console.log(error?.response?.data?.message);
+      dispatch(openErrorSnackbar(error?.response?.data?.message));
     },
   });
   return (

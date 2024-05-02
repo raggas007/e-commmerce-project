@@ -11,6 +11,7 @@ export const productCategories = [
   "liquor",
   "glasses",
   "accessory",
+  "toy",
 ];
 
 export const fallbackImage =

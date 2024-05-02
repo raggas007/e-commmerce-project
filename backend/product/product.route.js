@@ -140,17 +140,17 @@ router.post(
   validateReqBody(paginationProductSchema),
   async (req, res) => {
     //  extract pagination data from req.body
-    const paginationData = req.body;
+    const { page, limit, searchText } = req.body;
 
     // calculate skip page
-    const skip = (paginationData.page - 1) * paginationData.limit;
+    const skip = (page - 1) * limit;
 
     //run query
 
     const productList = await Product.aggregate([
       { $match: {} },
       { $skip: skip },
-      { $limit: paginationData.limit },
+      { $limit: limit },
       {
         $project: {
           name: 1,
@@ -160,15 +160,18 @@ router.post(
           image: 1,
           category: 1,
           freeShipping: 1,
-          description: { $substr: ["$description", 0, 200] },
+          description: { $substr: ["$description", 0, 100] },
         },
       },
     ]);
 
+    const totalProducts = await Product.find().countDocuments();
+    const numberOfPages = Math.ceil(totalProducts / limit);
+
     //send response
     return res
       .status(200)
-      .send({ message: "success", productList: productList });
+      .send({ message: "success", productList: productList, numberOfPages });
   }
 );
 
@@ -205,15 +208,17 @@ router.post(
           price: 1,
           image: 1,
           category: 1,
-          description: { $substr: ["$description", 0, 200] },
+          description: { $substr: ["$description", 0, 100] },
         },
       },
     ]);
+    const allProducts = await Product.find().countDocuments();
+    const totalPagesNumber = Math.ceil(allProducts / limit);
 
     //send response
     return res
       .status(200)
-      .send({ message: "success", productList: productList });
+      .send({ message: "success", productList: productList, totalPagesNumber });
   }
 );
 

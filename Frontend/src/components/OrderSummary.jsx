@@ -1,7 +1,34 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
+import { useMutation } from "react-query";
+import $axios from "../lib/axios.instance";
+import { useDispatch } from "react-redux";
+import Loader from "./Loader";
+import { openErrorSnackbar } from "../stores/slices/snackbarSlices";
 
-const OrderSummary = ({ orderSummary }) => {
+const OrderSummary = ({ orderSummary, grandTotal, productDataForOrdering }) => {
+  const dispatch = useDispatch();
+  const { isLoading, mutate } = useMutation({
+    mutationKey: ["initiate-khalti"],
+    mutationFn: async () => {
+      return await $axios.post("/payment/khalti/start", {
+        amount: grandTotal,
+        productList: productDataForOrdering,
+      });
+    },
+    onSuccess: (response) => {
+      const paymentUrl = response?.data?.khaltiPaymentDetails?.payment_url;
+
+      window.location.href = paymentUrl;
+    },
+    onError: () => {
+      dispatch(openErrorSnackbar(error?.response?.data?.message));
+    },
+  });
+
+  {
+    isLoading && <Loader color="secondary" />;
+  }
   return (
     <Box
       sx={{
@@ -17,7 +44,7 @@ const OrderSummary = ({ orderSummary }) => {
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
           Order Summary
         </Typography>
-        {orderSummary.map((item, index) => {
+        {orderSummary?.map((item, index) => {
           return (
             <Stack
               direction="row"
@@ -40,8 +67,15 @@ const OrderSummary = ({ orderSummary }) => {
           );
         })}
       </Stack>
-      <Button variant="contained" color="success" sx={{ marginTop: "1rem" }}>
-        Proceed to checkout
+      <Button
+        variant="contained"
+        color="success"
+        sx={{ marginTop: "1rem" }}
+        onClick={() => {
+          mutate();
+        }}
+      >
+        Pay with Khalti
       </Button>
     </Box>
   );

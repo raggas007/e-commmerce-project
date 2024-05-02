@@ -9,4 +9,5 @@ export let paginationProductSchema = Yup.object({
     .required("page limit is required.")
     .default(6)
     .min(1, "minimum limit is 1"),
+  searchText: Yup.string().nullable().trim(),
 });

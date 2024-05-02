@@ -37,6 +37,7 @@ export const productValidationSchema = Yup.object({
       "liquor",
       "glasses",
       "accessory",
+      "toy",
     ]),
   freeShipping: Yup.boolean().default(false),
   image: Yup.string().nullable().trim(),
